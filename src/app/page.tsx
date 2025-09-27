@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 import { toolsRegistry } from '@/lib/toolsRegistry';
 
 export default function HomePage() {
@@ -88,6 +90,7 @@ return ( <main className="min-h-screen flex flex-col items-center bg-gray-50 dar
       ))}
     </div>
   </section>
+  <SpeedInsights />
 </main>
 );
 }
