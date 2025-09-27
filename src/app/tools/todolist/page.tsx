@@ -8,6 +8,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -21,34 +22,30 @@ import { Input } from "@/components/ui/input";
 
 import { supabase } from "@/lib/supabaseClient";
 
-
-type Todo = { id: string; text: string; completed: boolean };
+type Todo = { id: string; text: string; completed: boolean; position?: number };
 
 export default function TodoListPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const { theme, setTheme } = useTheme();
 
-  // sensors: tambahkan sedikit distance agar klik singkat tidak langsung jadi drag
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
   );
 
-  // load dari localStorage
   useEffect(() => {
-  const fetchTodos = async () => {
-    const { data, error } = await supabase
-      .from("todos")
-      .select("*")
-      .order("position", { ascending: true });
+    const fetchTodos = async () => {
+      const { data, error } = await supabase
+        .from("todos")
+        .select("*")
+        .order("position", { ascending: true });
 
-    if (error) console.error(error);
-    else if (data) setTodos(data);
-  };
+      if (error) console.error(error);
+      else if (data) setTodos(data);
+    };
 
-  fetchTodos();
-}, []);
-
+    fetchTodos();
+  }, []);
 
   useEffect(() => {
     try {
@@ -59,69 +56,65 @@ export default function TodoListPage() {
   }, [todos]);
 
   const addTodo = async () => {
-  if (!newTodo.trim()) return;
+    if (!newTodo.trim()) return;
 
-  const { data, error } = await supabase
-    .from("todos")
-    .insert([{ text: newTodo.trim(), completed: false }])
-    .select()
-    .single();
+    const { data, error } = await supabase
+      .from("todos")
+      .insert([{ text: newTodo.trim(), completed: false }])
+      .select()
+      .single();
 
-  if (error) console.error(error);
-  else if (data) setTodos((prev) => [data, ...prev]);
+    if (error) console.error(error);
+    else if (data) setTodos((prev) => [data, ...prev]);
 
-  setNewTodo("");
-};
+    setNewTodo("");
+  };
 
-
-  // jika checked diberikan => set sesuai checked, kalau tidak => toggle
   const toggleTodo = async (id: string, checked?: boolean) => {
-  const todo = todos.find((t) => t.id === id);
-  if (!todo) return;
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
 
-  const newVal = typeof checked === "boolean" ? checked : !todo.completed;
+    const newVal = typeof checked === "boolean" ? checked : !todo.completed;
 
-  const { error } = await supabase
-    .from("todos")
-    .update({ completed: newVal })
-    .eq("id", id);
+    const { error } = await supabase
+      .from("todos")
+      .update({ completed: newVal })
+      .eq("id", id);
 
-  if (error) console.error(error);
-  else {
-    setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: newVal } : t))
-    );
-  }
-};
-
+    if (error) console.error(error);
+    else {
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, completed: newVal } : t))
+      );
+    }
+  };
 
   const deleteTodo = async (id: string) => {
-  const { error } = await supabase.from("todos").delete().eq("id", id);
-  if (error) console.error(error);
-  else setTodos((prev) => prev.filter((t) => t.id !== id));
-};
+    const { error } = await supabase.from("todos").delete().eq("id", id);
+    if (error) console.error(error);
+    else setTodos((prev) => prev.filter((t) => t.id !== id));
+  };
 
+  // ✅ Perbaikan: gunakan DragEndEvent dari @dnd-kit/core
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
-  const handleDragEnd = async (event: any) => {
-  const { active, over } = event;
-  if (!over || active.id === over.id) return;
+    setTodos((prev) => {
+      const oldIndex = prev.findIndex((p) => p.id === String(active.id));
+      const newIndex = prev.findIndex((p) => p.id === String(over.id));
+      if (oldIndex === -1 || newIndex === -1) return prev;
 
-  setTodos((prev) => {
-    const oldIndex = prev.findIndex((p) => p.id === String(active.id));
-    const newIndex = prev.findIndex((p) => p.id === String(over.id));
-    if (oldIndex === -1 || newIndex === -1) return prev;
+      const newTodos = arrayMove(prev, oldIndex, newIndex);
 
-    const newTodos = arrayMove(prev, oldIndex, newIndex);
+      // Update posisi ke Supabase
+      newTodos.forEach(async (t, i) => {
+        await supabase.from("todos").update({ position: i }).eq("id", t.id);
+      });
 
-    // Update posisi ke Supabase
-    newTodos.forEach(async (t, i) => {
-      await supabase.from("todos").update({ position: i }).eq("id", t.id);
+      return newTodos;
     });
-
-    return newTodos;
-  });
-};
-
+  };
 
   return (
     <div className="flex flex-col items-center p-6">
