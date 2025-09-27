@@ -6,17 +6,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { GripVertical, Trash2 } from "lucide-react";
 
-type Todo = { id: string; text: string; completed: boolean };
+// Gunakan tipe yang sama dengan TodoListPage
+export type Todo = { id: string; text: string; completed: boolean };
+
+interface SortableItemProps {
+  todo: Todo;
+  toggleTodo: (id: string, checked?: boolean) => void;
+  deleteTodo: (id: string) => void;
+}
 
 export default function SortableItem({
   todo,
   toggleTodo,
   deleteTodo,
-}: {
-  todo: Todo;
-  toggleTodo: (id: string, checked?: boolean) => void;
-  deleteTodo: (id: string) => void;
-}) {
+}: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: todo.id,
   });
@@ -33,8 +36,7 @@ export default function SortableItem({
       className="flex items-center justify-between p-2 rounded-md border bg-background"
     >
       <div className="flex items-center gap-2">
-        {/* HANYA handle (ikon) yang menerima listeners/attributes.
-            Jadi checkbox & text tetap bisa di-interact. */}
+        {/* HANYA handle (ikon) yang menerima listeners/attributes */}
         <div
           {...attributes}
           {...listeners}
@@ -46,7 +48,7 @@ export default function SortableItem({
 
         <Checkbox
           checked={todo.completed}
-          onCheckedChange={(v) => toggleTodo(todo.id, v === true)}
+          onCheckedChange={(v: boolean) => toggleTodo(todo.id, v)}
         />
 
         <span className={`${todo.completed ? "line-through text-gray-500" : ""}`}>
