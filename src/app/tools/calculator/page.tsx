@@ -33,7 +33,6 @@ export default function CalculatorPage() {
 
   const handleEqual = async () => {
     try {
-      // eslint-disable-next-line no-eval
       const result = eval(input).toString();
       const { data, error } = await supabase
         .from("calc_history")

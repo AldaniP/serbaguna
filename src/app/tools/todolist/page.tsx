@@ -16,10 +16,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import SortableItem from "./sortable-item";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { ArrowLeft, Moon, Sun } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 
 type Todo = { id: string; text: string; completed: boolean; position?: number };
@@ -95,7 +95,6 @@ export default function TodoListPage() {
     else setTodos((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // ✅ Perbaikan: gunakan DragEndEvent dari @dnd-kit/core
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -107,7 +106,7 @@ export default function TodoListPage() {
 
       const newTodos = arrayMove(prev, oldIndex, newIndex);
 
-      // Update posisi ke Supabase
+      // update posisi ke supabase
       newTodos.forEach(async (t, i) => {
         await supabase.from("todos").update({ position: i }).eq("id", t.id);
       });
@@ -118,23 +117,28 @@ export default function TodoListPage() {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <div className="flex justify-between w-full max-w-lg mb-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 w-full max-w-lg">
         <Link href="/">
-          <Button variant="outline">⬅ Kembali</Button>
+          <Button variant="outline" size="icon">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
         </Link>
-
+        <h1 className="text-2xl font-bold">To-Do List</h1>
         <Button
           variant="outline"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          size="icon"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         >
-          {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+          {theme === "light" ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
         </Button>
       </div>
 
       <Card className="w-full max-w-lg shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">Todo List</CardTitle>
-        </CardHeader>
         <CardContent>
           <div className="flex gap-2 mb-4">
             <Input

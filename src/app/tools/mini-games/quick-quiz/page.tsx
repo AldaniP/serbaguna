@@ -58,8 +58,12 @@ export default function QuickQuizGame() {
 
       setQuestions(data.questions);
       if (data.fallback) setFallbackUsed(true);
-    } catch (err: any) {
-      setErrorMsg(err?.message ?? String(err));
+        } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg(String(err));
+      }
       const fallback: Q[] = [
         { question: "Apa ibu kota Indonesia?", options: ["Jakarta", "Bandung", "Surabaya", "Medan"], answer: "Jakarta" },
         { question: "Siapa presiden pertama Indonesia?", options: ["Soekarno", "Suharto", "Jokowi", "Habibie"], answer: "Soekarno" },
@@ -68,6 +72,7 @@ export default function QuickQuizGame() {
       setQuestions(fallback);
       setFallbackUsed(true);
     } finally {
+
       setLoading(false);
     }
   };
