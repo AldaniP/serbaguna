@@ -47,6 +47,6 @@ export const toolsRegistry: Tool[] = [
     slug: "mini-games",
     description: "Untuk main game sederhana",
     icon: "CheckSquare",
-    comingSoon: true,
+    comingSoon: false,
   },
 ];
