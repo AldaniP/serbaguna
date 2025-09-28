@@ -30,4 +30,10 @@ export const toolsRegistry: Tool[] = [
     description: "Untuk convert panjang, suhu",
     icon: "CheckSquare",
   },
+  {
+    name: "Summarize",
+    slug: "summarize",
+    description: "Untuk merangkum teks panjang",
+    icon: "CheckSquare",
+  },
 ];

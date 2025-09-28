@@ -1,108 +1,65 @@
-# Serbaguna
+# 📌 Project Title: Serbaguna
 
-**Serbaguna** adalah portal/tools hub berbasis web untuk menyimpan dan menggunakan berbagai macam tools yang dibuat dengan Next.js.  
-Website ini mendukung penambahan tools baru dengan mudah dan menggunakan **Supabase** untuk menyimpan data (misal Notes, Todo List) dengan user anonim saat ini.
-
----
-
-## 🚀 Fitur
-
-- Dashboard utama menampilkan daftar tools.
-- Tools saat ini:
-  - **Calculator** – Kalkulator sederhana.
-  - **Notes** – Catatan yang disimpan ke Supabase (anon user).
-  - **Todo List** – Daftar tugas yang dapat ditambah/hapus.
-- Dark mode / light mode.
-- Mudah menambahkan tool baru (1 folder per tool).
-- Penyimpanan data menggunakan Supabase (anon key untuk sementara).
+## 📖 Description
+Serbaguna adalah aplikasi berbasis web yang menyediakan berbagai utilitas harian dalam satu platform. Aplikasi ini dirancang untuk mempermudah pengguna dalam mengakses beragam tools seperti **Calculator, Notes, To-Do List, Converter**, dan lainnya.  
+Tujuan utama proyek ini adalah menyediakan platform **multifungsi**, ringan, dan mudah digunakan tanpa harus berpindah aplikasi.  
 
 ---
 
-## 🧰 Tech Stack
+## 🛠 Technologies Used
+- **Frontend Framework:** Next.js (App Router)  
+- **UI Components:** Tailwind CSS, shadcn/ui  
+- **Icons:** lucide-react  
+- **State Management:** React Hooks (`useState`, `useEffect`)  
+- **Authentication & Database:** Supabase  
+- **Deployment:** Vercel  
 
-- **Frontend:** Next.js (App Router), React, TailwindCSS  
-- **Backend / Database:** Supabase (PostgreSQL)  
-- **Deployment:** Vercel
+**Alasan Pemilihan Teknologi:**  
+Next.js dipilih karena mendukung **SSR dan SSG** yang membuat aplikasi lebih cepat. Tailwind CSS dipilih karena efisiensi styling. Supabase dipakai sebagai backend karena menyediakan **database, autentikasi, dan hosting** yang mudah diintegrasikan.  
 
 ---
 
-## ⚙️ Persiapan Lokal
+## ✨ Features
+- 🔢 **Calculator**: Perhitungan dasar dengan antarmuka sederhana.  
+- 📝 **Notes**: Menyimpan catatan dengan kategori, dukungan Supabase untuk penyimpanan.  
+- ✅ **To-Do List**: Membuat daftar tugas, menandai selesai, dan menghapus.  
+- 🔄 **Converter**: Konversi satuan dan perbedaan tanggal (tahun, bulan, hari).  
 
+---
+
+## ⚙️ Setup Instructions
 1. Clone repository:
-```bash
-git clone https://github.com/username/serbaguna.git
-cd serbaguna
-```
-
+   ```bash
+   git clone https://github.com/username/serbaguna-tools.git
+   cd serbaguna-tools
+   ```
 2. Install dependencies:
-```bash
-npm install
-# atau
-yarn install
-```
-
-3. Buat file `.env.local` di root project:
-```env
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-4. Jalankan server development:
-```bash
-npm run dev
-# atau
-yarn dev
-```
-Buka [http://localhost:3000](http://localhost:3000)
-
----
-
-## 🗂 Struktur Project
-
-```
-serbaguna/
-├── app/
-│   ├── layout.tsx         # Layout utama (navbar/sidebar)
-│   ├── page.tsx           # Halaman beranda / dashboard tools
-│   └── tools/             # Semua tools
-│       ├── page.tsx       # Daftar semua tools
-│       ├── calculator/
-│       │   └── page.tsx
-│       ├── notes/
-│       │   └── page.tsx
-│       └── todo-list/
-│           └── page.tsx
-├── components/            # Komponen global (Navbar, Sidebar, ToolCard)
-├── lib/                   # Helper & Supabase client
-│   └── supabaseClient.ts
-├── public/                # File statis (favicon, images)
-├── styles/                # TailwindCSS & global styles
-├── .env.local             # Environment variables (Supabase URL & anon key)
-├── package.json
-└── tailwind.config.js
-```
+   ```bash
+   npm install
+   ```
+3. Setup Supabase:
+   - Buat project di [Supabase](https://supabase.com/).  
+   - Copy **API Keys** ke file `.env.local`.  
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
+4. Jalankan server:
+   ```bash
+   npm run dev
+   ```
+5. Buka di browser:
+   ```
+   http://localhost:3000
+   ```
 
 ---
 
-## 📝 Cara Menambah Tools Baru
+## 🤖 AI Support Explanation
+Dalam pengembangan proyek ini digunakan **IBM Granite** sebagai pendukung berbasis AI.  
+Peran IBM Granite antara lain:  
+- Membantu menyusun struktur kode (React + Next.js).  
+- Menyediakan solusi dan penjelasan atas error yang terjadi.
+- Membantu dokumentasi.  
 
-1. Buat folder baru di `app/tools/` → misal `image-compressor`.
-2. Tambahkan `page.tsx` untuk UI tool.
-3. (Opsional) Buat folder `components/` & `utils.ts` jika tool cukup kompleks.
-4. Daftarkan tool di `lib/toolsRegistry.ts` (nama, slug, icon, deskripsi).
-5. Tool otomatis muncul di daftar dashboard `/tools`.
-
----
-
-## 🔗 Referensi
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Supabase Documentation](https://supabase.com/docs)
-- [TailwindCSS Documentation](https://tailwindcss.com/docs)
-
----
-
-## 📜 Lisensi
-
-MIT License
-
+**Dampak nyata:** penggunaan IBM Granite mempercepat proses pengembangan, mengurangi error, serta mempermudah debugging dan dokumentasi.  
