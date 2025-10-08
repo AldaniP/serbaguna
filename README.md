@@ -6,52 +6,79 @@ Tujuan utama proyek ini adalah menyediakan platform **multifungsi**, ringan, dan
 
 ---
 
-## 🛠 Technologies Used
-- **Frontend Framework:** Next.js (App Router)  
-- **UI Components:** Tailwind CSS, shadcn/ui  
-- **Icons:** lucide-react  
-- **State Management:** React Hooks (`useState`, `useEffect`)  
-- **Authentication & Database:** Supabase  
-- **Deployment:** Vercel  
 
-**Alasan Pemilihan Teknologi:**  
-Next.js dipilih karena mendukung **SSR dan SSG** yang membuat aplikasi lebih cepat. Tailwind CSS dipilih karena efisiensi styling. Supabase dipakai sebagai backend karena menyediakan **database, autentikasi, dan hosting** yang mudah diintegrasikan.  
+# � Serbaguna
+
+Serbaguna adalah sebuah web app multifungsi yang mengumpulkan berbagai utilitas kecil (tools & mini-games) dalam satu tempat. Aplikasi ini dibangun dengan Next.js (App Router) dan ditujukan sebagai playground untuk alat produktivitas kecil dan game ringan.
 
 ---
 
-## ✨ Features
-- 🔢 **Calculator**: Perhitungan dasar dengan antarmuka sederhana.  
-- 📝 **Notes**: Menyimpan catatan dengan kategori, dukungan Supabase untuk penyimpanan.  
-- ✅ **To-Do List**: Membuat daftar tugas, menandai selesai, dan menghapus.  
-- 🔄 **Converter**: Konversi satuan dan perbedaan tanggal (tahun, bulan, hari).  
+## ✨ Fitur (terbaru)
+Daftar tools dan mini-games yang saat ini tersedia di proyek ini:
+
+- Tools utama:
+  - `Calculator` — kalkulator dasar (src/app/tools/calculator/page.tsx)
+  - `Converter` — konversi satuan (src/app/tools/converter/page.tsx)
+  - `Notes` — penyimpanan catatan (src/app/tools/notes/page.tsx)
+  - `Todolist` — daftar tugas interaktif dengan item yang dapat di-sort (src/app/tools/todolist/page.tsx, sortable-item.tsx)
+  - `Summarize` — antarmuka untuk merangkum teks (src/app/tools/summarize/page.tsx)
+
+- Mini-games (di folder `src/app/tools/mini-games`):
+  - `Click Speed` — uji kecepatan klik (click-speed/page.tsx)
+  - `Number Guess` — permainan tebak angka (number-guess/page.tsx)
+  - `Quick Quiz` — kuis singkat (quick-quiz/page.tsx)
+  - `Snake` — game snake sederhana (snake/page.tsx)
+
+- API routes (serverless):
+  - `src/app/api/quiz/route.ts` — endpoint quiz
+  - `src/app/api/summarize/route.ts` — endpoint ringkasan otomatis
 
 ---
 
-## ⚙️ Setup Instructions
-1. Clone repository:
-   ```bash
-   git clone https://github.com/username/serbaguna-tools.git
-   cd serbaguna-tools
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Setup Supabase:
-   - Buat project di [Supabase](https://supabase.com/).  
-   - Copy **API Keys** ke file `.env.local`.  
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your-url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   ```
-4. Jalankan server:
-   ```bash
-   npm run dev
-   ```
-5. Buka di browser:
-   ```
-   http://localhost:3000
-   ```
+## 🛠️ Teknologi
+
+- Frontend: Next.js (App Router)
+- Styling / UI: Tailwind CSS, shadcn/ui
+- Icon: lucide-react
+- Backend ringan / DB: Supabase
+- Deployment: Vercel
+
+---
+
+## 🚀 Menjalankan proyek secara lokal
+
+1. Clone repository dan masuk ke folder proyek:
+
+```bash
+git clone https://github.com/AldaniP/serbaguna.git
+cd serbaguna
+```
+
+2. Install dependensi:
+
+```bash
+npm install
+```
+
+3. (Opsional) Konfigurasi Supabase
+
+Jika Anda ingin menggunakan fitur yang membutuhkan Supabase (mis. Notes), buat project di https://supabase.com lalu tambahkan variabel berikut ke file `.env.local` di root proyek:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+# (opsional) SERVICE_ROLE_KEY atau private keys jika diperlukan untuk server-side
+```
+
+4. Jalankan server development:
+
+```bash
+npm run dev
+```
+
+5. Buka aplikasi di browser:
+
+http://localhost:3000
 
 ---
 
