@@ -13,8 +13,8 @@ export default function SnakeGame() {
   const { theme, setTheme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const [boardSize, setBoardSize] = useState(20); // Jumlah kotak per sisi
-  const [gridSize, setGridSize] = useState(20); // Ukuran tiap kotak (px)
+  const [boardSize, setBoardSize] = useState(20); // bisa diubah ke 15, 25, dll
+  const [gridSize, setGridSize] = useState(20); // otomatis menyesuaikan ukuran
   const [snake, setSnake] = useState([{ x: 5, y: 5 }]);
   const [food, setFood] = useState({ x: 10, y: 10 });
   const [dir, setDir] = useState<Direction>("RIGHT");
@@ -26,12 +26,12 @@ export default function SnakeGame() {
 
   const canvasSize = 400;
 
-  // Update grid size ketika ukuran papan berubah
+  // Hitung ulang grid size saat boardSize berubah
   useEffect(() => {
     setGridSize(canvasSize / boardSize);
   }, [boardSize]);
 
-  // Sinkronisasi referensi arah & makanan
+  // Sinkronisasi referensi
   useEffect(() => {
     foodRef.current = food;
   }, [food]);
@@ -40,7 +40,7 @@ export default function SnakeGame() {
   }, [dir]);
 
   // 🎨 Gambar permainan
-  const drawGame = (snakeBody: any[], foodPos: any) => {
+  const drawGame = (snakeBody: { x: number; y: number }[], foodPos: { x: number; y: number }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -86,27 +86,26 @@ export default function SnakeGame() {
     });
   };
 
-  // 🕹️ Logika utama permainan
+  // 🕹️ Logika permainan
   const gameLoop = () => {
     setSnake((prev) => {
       const newSnake = [...prev];
       const head = { ...newSnake[0] };
       const currentDir = dirRef.current;
 
-      // Gerakkan kepala ular
       if (currentDir === "UP") head.y -= 1;
       if (currentDir === "DOWN") head.y += 1;
       if (currentDir === "LEFT") head.x -= 1;
       if (currentDir === "RIGHT") head.x += 1;
 
-      // 🚀 FITUR TEMBUS DINDING
-      if (head.x < 0) head.x = boardSize - 1;
-      if (head.x >= boardSize) head.x = 0;
-      if (head.y < 0) head.y = boardSize - 1;
-      if (head.y >= boardSize) head.y = 0;
-
-      // Cek tabrakan dengan diri sendiri
-      if (newSnake.some((s) => s.x === head.x && s.y === head.y)) {
+      // Cek tabrakan
+      if (
+        head.x < 0 ||
+        head.y < 0 ||
+        head.x >= boardSize ||
+        head.y >= boardSize ||
+        newSnake.some((s) => s.x === head.x && s.y === head.y)
+      ) {
         setIsGameOver(true);
         if (gameLoopRef.current) clearInterval(gameLoopRef.current);
         return prev;
@@ -119,7 +118,7 @@ export default function SnakeGame() {
       if (head.x === currentFood.x && head.y === currentFood.y) {
         setScore((s) => s + 10);
 
-        // Tentukan makanan baru di posisi kosong
+        // 🧠 Pastikan makanan baru selalu muncul di dalam area papan
         let newFood: { x: number; y: number };
         do {
           newFood = {
@@ -130,14 +129,13 @@ export default function SnakeGame() {
 
         setFood(newFood);
       } else {
-        newSnake.pop(); // Tidak makan, jadi buang ekor
+        newSnake.pop();
       }
 
       return newSnake;
     });
   };
 
-  // 🔁 Jalankan game loop
   useEffect(() => {
     if (isGameOver) return;
     gameLoopRef.current = setInterval(gameLoop, 120);
@@ -146,7 +144,7 @@ export default function SnakeGame() {
     };
   }, [isGameOver, boardSize]);
 
-  // 🎮 Kontrol keyboard
+  // Keyboard kontrol
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       const currentDir = dirRef.current;
@@ -159,17 +157,16 @@ export default function SnakeGame() {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
-  // Render setiap frame
+  // Render ulang canvas
   useEffect(() => {
     drawGame(snake, food);
   }, [snake, food, theme, gridSize]);
 
-  // Ulangi permainan
+  // Restart game
   const restartGame = () => {
     setSnake([{ x: 5, y: 5 }]);
     setFood({ x: 10, y: 10 });
     setDir("RIGHT");
-    dirRef.current = "RIGHT";
     setScore(0);
     setIsGameOver(false);
   };
@@ -177,7 +174,7 @@ export default function SnakeGame() {
   return (
     <div className="min-h-screen p-4 flex flex-col items-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <div className="flex items-center justify-between w-full max-w-md mb-4">
-        <Link href="/tools/mini-games">
+        <Link href="/">
           <Button variant="outline" size="icon">
             <ArrowLeft />
           </Button>
