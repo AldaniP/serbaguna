@@ -142,6 +142,7 @@ export default function SnakeGame() {
     return () => {
       if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGameOver, boardSize]);
 
   // Keyboard kontrol
@@ -160,6 +161,7 @@ export default function SnakeGame() {
   // Render ulang canvas
   useEffect(() => {
     drawGame(snake, food);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snake, food, theme, gridSize]);
 
   // Restart game
@@ -218,7 +220,7 @@ export default function SnakeGame() {
 
           {isGameOver && (
             <p className="text-red-500 font-semibold mb-3 text-center">
-              💀 Game Over! Tekan "Ulangi" untuk main lagi.
+              💀 Game Over! Tekan &quot;Ulangi&quot; untuk main lagi.
             </p>
           )}
 
