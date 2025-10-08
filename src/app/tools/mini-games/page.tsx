@@ -34,6 +34,12 @@ export default function MiniGameHub() {
       color: "from-purple-500 to-pink-500",
       icon: <MousePointerClick className="h-6 w-6" />,
     },
+    {
+      title: "Snake",
+      href: "/tools/mini-games/snake",
+      color: "from-purple-500 to-pink-500",
+      icon: <MousePointerClick className="h-6 w-6" />,
+    },
   ];
 
   return (
