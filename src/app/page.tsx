@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { toolsRegistry } from '@/lib/toolsRegistry';
+import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
 const { theme, setTheme } = useTheme();
@@ -30,13 +32,19 @@ const pinnedTools = toolsRegistry.filter(t => pinned.includes(t.name));
 const otherTools = toolsRegistry.filter(t => !pinned.includes(t.name));
 
 return ( <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6">
-{/* Header */} <header className="w-full flex justify-between items-center max-w-4xl mb-10"> <h1 className="text-3xl font-bold">🔧 Serbaguna</h1>
+{/* Header */} <header className="w-full flex justify-between items-center max-w-4xl mb-10"> <h1 className="text-3xl font-bold">Serbaguna</h1>
 {mounted && (
-<button
-onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm"
->
-{theme === "dark" ? "🌞 Light" : "🌙 Dark"} </button>
+<Button
+          variant="outline"
+          size="icon"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "light" ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
+        </Button>
 )} </header>
 
   {/* Pinned Tools */}
@@ -69,7 +77,7 @@ className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm"
 
   {/* All Tools */}
   <section className="w-full max-w-4xl">
-    <h2 className="text-xl font-semibold mb-4">🧰 Semua Tools</h2>
+    <h2 className="text-xl font-semibold mb-4">Semua Tools</h2>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {otherTools.map(tool => (
         <div key={tool.slug} className="relative p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800 hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
