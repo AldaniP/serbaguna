@@ -67,7 +67,7 @@ Jika Anda ingin menggunakan fitur yang membutuhkan Supabase (mis. Notes), buat p
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-# (opsional) SERVICE_ROLE_KEY atau private keys jika diperlukan untuk server-side
+REPLICATE_API_TOKEN=your-replicate-api
 ```
 
 4. Jalankan server development:
