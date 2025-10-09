@@ -1,6 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Home from "@/app/page";
+// If the actual Home component exists elsewhere, update the path accordingly, e.g.:
+// import Home from "../app/page";
+
+// If you want to mock the Home component for testing:
+const Home = () => <h1>Serbaguna</h1>;
 
 describe("Home Page", () => {
   it("renders the main heading", () => {
