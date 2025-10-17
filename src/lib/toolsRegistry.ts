@@ -49,4 +49,18 @@ export const toolsRegistry: Tool[] = [
     icon: "CheckSquare",
     comingSoon: false,
   },
+    {
+    name: "Compressor",
+    slug: "compressor",
+    description: "Untuk compress berbagai file",
+    icon: "CheckSquare",
+    comingSoon: true,
+  },
+    {
+    name: "Downloader",
+    slug: "downloader",
+    description: "Untuk download berbagai file dari internet",
+    icon: "CheckSquare",
+    comingSoon: true,
+  },
 ];
