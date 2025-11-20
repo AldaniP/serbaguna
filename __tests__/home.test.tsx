@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 // If the actual Home component exists elsewhere, update the path accordingly, e.g.:
