@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Download, Loader2, Youtube, AlertCircle, FileVideo } from "lucide-react";
 
 interface VideoFormat {
@@ -43,7 +44,7 @@ export default function Downloader() {
       let data;
       try {
         data = await response.json();
-      } catch (e) {
+      } catch {
         throw new Error("Received invalid response from server");
       }
 
@@ -52,8 +53,8 @@ export default function Downloader() {
       }
 
       setVideoInfo(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -111,10 +112,12 @@ export default function Downloader() {
       {videoInfo && (
         <div className="max-w-2xl mx-auto bg-card border rounded-xl overflow-hidden shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="aspect-video relative">
-            <img
+            <Image
               src={videoInfo.thumbnail}
               alt={videoInfo.title}
               className="w-full h-full object-cover"
+              fill
+              unoptimized
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-12">
               <h2 className="text-white font-semibold text-lg line-clamp-2">{videoInfo.title}</h2>

@@ -115,10 +115,11 @@ export async function GET(request: Request) {
             },
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Download error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to download video";
         return NextResponse.json(
-            { error: error.message || "Failed to download video" },
+            { error: errorMessage },
             { status: 500 }
         );
     }
