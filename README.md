@@ -1,11 +1,11 @@
 # 📌 Project Title: Serbaguna
 
 ## 📖 Description
+
 Serbaguna adalah aplikasi berbasis web yang menyediakan berbagai utilitas harian dalam satu platform. Aplikasi ini dirancang untuk mempermudah pengguna dalam mengakses beragam tools seperti **Calculator, Notes, To-Do List, Converter**, dan lainnya.  
-Tujuan utama proyek ini adalah menyediakan platform **multifungsi**, ringan, dan mudah digunakan tanpa harus berpindah aplikasi.  
+Tujuan utama proyek ini adalah menyediakan platform **multifungsi**, ringan, dan mudah digunakan tanpa harus berpindah aplikasi.
 
 ---
-
 
 # � Serbaguna
 
@@ -14,16 +14,21 @@ Serbaguna adalah sebuah web app multifungsi yang mengumpulkan berbagai utilitas 
 ---
 
 ## ✨ Fitur (terbaru)
+
 Daftar tools dan mini-games yang saat ini tersedia di proyek ini:
 
 - Tools utama:
+
   - `Calculator` — kalkulator dasar (src/app/tools/calculator/page.tsx)
+  - `Compressor` — kompres file online (src/app/tools/compressor/page.tsx)
   - `Converter` — konversi satuan (src/app/tools/converter/page.tsx)
+  - `Downloader` — unduh video YouTube (src/app/tools/downloader/page.tsx)
   - `Notes` — penyimpanan catatan (src/app/tools/notes/page.tsx)
   - `Todolist` — daftar tugas interaktif dengan item yang dapat di-sort (src/app/tools/todolist/page.tsx, sortable-item.tsx)
   - `Summarize` — antarmuka untuk merangkum teks (src/app/tools/summarize/page.tsx)
 
 - Mini-games (di folder `src/app/tools/mini-games`):
+
   - `Click Speed` — uji kecepatan klik (click-speed/page.tsx)
   - `Number Guess` — permainan tebak angka (number-guess/page.tsx)
   - `Quick Quiz` — kuis singkat (quick-quiz/page.tsx)
@@ -83,10 +88,12 @@ http://localhost:3000
 ---
 
 ## 🤖 AI Support Explanation
-Dalam pengembangan proyek ini digunakan **IBM Granite** sebagai pendukung berbasis AI.  
-Peran IBM Granite antara lain:  
-- Membantu menyusun struktur kode (React + Next.js).  
-- Menyediakan solusi dan penjelasan atas error yang terjadi.
-- Membantu dokumentasi.  
 
-**Dampak nyata:** penggunaan IBM Granite mempercepat proses pengembangan, mengurangi error, serta mempermudah debugging dan dokumentasi.  
+Dalam pengembangan proyek ini digunakan **IBM Granite** sebagai pendukung berbasis AI.  
+Peran IBM Granite antara lain:
+
+- Membantu menyusun struktur kode (React + Next.js).
+- Menyediakan solusi dan penjelasan atas error yang terjadi.
+- Membantu dokumentasi.
+
+**Dampak nyata:** penggunaan IBM Granite mempercepat proses pengembangan, mengurangi error, serta mempermudah debugging dan dokumentasi.
