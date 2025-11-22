@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { spawn } from "child_process";
+import play from "play-dl";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const url = searchParams.get("url");
     const itag = searchParams.get("itag");
-    const hasVideo = searchParams.get("hasVideo") === "true";
-    const hasAudio = searchParams.get("hasAudio") === "true";
 
     if (!url) {
         return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
@@ -18,100 +14,66 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Missing format ID" }, { status: 400 });
     }
 
-    const binaryPath = path.join(process.cwd(), "bin", "yt-dlp");
-    if (!fs.existsSync(binaryPath)) {
-        return NextResponse.json(
-            { error: "Server configuration error: yt-dlp binary not found" },
-            { status: 500 }
-        );
+    // Validate YouTube URL
+    if (!play.yt_validate(url) || play.yt_validate(url) !== "video") {
+        return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
     }
 
     try {
-        // Determine format argument
-        // If it's video-only, we merge with best audio
-        let formatArg = itag;
-        let isMerging = false;
+        // Extract Video ID
+        const videoId = play.extractID(url);
+        console.log("Extracted Video ID:", videoId);
 
-        if (hasVideo && !hasAudio) {
-            formatArg = `${itag}+bestaudio`;
-            isMerging = true;
-        }
-
-        // 1. Get Filename
-        const filenameArgs = [
-            url,
-            "--get-filename",
-            "-f", formatArg,
-            "--no-warnings",
-            "--no-check-certificates",
-        ];
-
-        if (isMerging) {
-            filenameArgs.push("--merge-output-format", "mp4");
-        }
-
-        const filenameProcess = spawn(binaryPath, filenameArgs);
-        let filenameData = "";
-
-        await new Promise((resolve, reject) => {
-            filenameProcess.stdout.on("data", (data) => {
-                filenameData += data.toString();
-            });
-            filenameProcess.on("close", (code) => {
-                if (code === 0) resolve(null);
-                else reject(new Error("Failed to get filename"));
-            });
+        // Use play-dl stream method with Video ID
+        // Note: play-dl stream() usually takes URL or ID. We use ID to be safe.
+        const stream = await play.stream(videoId, {
+            quality: parseInt(itag, 10)
         });
 
-        let filename = filenameData.trim();
-        // Sanitize filename
-        filename = filename.replace(/[^\w\s\-\.]/gi, "").replace(/\s+/g, " ");
-        if (!filename) filename = "video.mp4";
-
-        // 2. Start Streaming
-        const streamArgs = [
-            url,
-            "-f", formatArg,
-            "-o", "-", // Stream to stdout
-            "--no-warnings",
-            "--no-check-certificates",
-            "--prefer-free-formats",
-            "--add-header", "referer:youtube.com",
-            "--add-header", "user-agent:googlebot"
-        ];
-
-        if (isMerging) {
-            streamArgs.push("--merge-output-format", "mp4");
+        if (!stream) {
+            return NextResponse.json({ error: "Failed to get video stream" }, { status: 500 });
         }
 
-        const ytProcess = spawn(binaryPath, streamArgs);
+        // Get video info for filename
+        const info = await play.video_info(url);
 
-        // Create a ReadableStream from the child process stdout
-        const stream = new ReadableStream({
-            start(controller) {
-                ytProcess.stdout.on("data", (chunk) => {
+        // Sanitize filename
+        let filename = info?.video_details.title
+            ?.replace(/[^\w\s\-\.]/gi, "")
+            .replace(/\s+/g, "_")
+            .substring(0, 100) || "video";
+
+        // Find format to get extension
+        const format = info?.format.find(f => f.itag?.toString() === itag);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const ext = (format as any)?.container || format?.mimeType?.split(";")?.[0]?.split("/")?.[1] || "mp4";
+        filename = `${filename}.${ext}`;
+
+        // Convert Node.js Readable stream to Web ReadableStream
+        const webStream = new ReadableStream({
+            async start(controller) {
+                stream.stream.on("data", (chunk: Buffer) => {
                     controller.enqueue(chunk);
                 });
-                ytProcess.stdout.on("end", () => {
+
+                stream.stream.on("end", () => {
                     controller.close();
                 });
-                ytProcess.stdout.on("error", (err) => {
+
+                stream.stream.on("error", (err: Error) => {
+                    console.error("Stream error:", err);
                     controller.error(err);
-                });
-                ytProcess.stderr.on("data", (data) => {
-                    // Log stderr but don't break stream unless it's fatal
-                    console.log("yt-dlp stderr:", data.toString());
                 });
             },
             cancel() {
-                ytProcess.kill();
+                stream.stream.destroy();
             },
         });
 
-        return new NextResponse(stream, {
+        return new NextResponse(webStream, {
             headers: {
                 "Content-Disposition": `attachment; filename="${filename}"`,
-                "Content-Type": "application/octet-stream",
+                "Content-Type": stream.type || "application/octet-stream",
             },
         });
 

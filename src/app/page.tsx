@@ -54,13 +54,18 @@ return ( <main className="min-h-screen flex flex-col items-center bg-gray-50 dar
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {pinnedTools.map(tool => (
           <div key={tool.slug} className="relative p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800 hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
-            <Link href={tool.comingSoon ? "#" : `/tools/${tool.slug}`} className={tool.comingSoon ? "cursor-not-allowed opacity-50" : ""} title={tool.comingSoon ? "Coming Soon" : ""}>
+            <Link href={tool.comingSoon || tool.maintenance ? "#" : `/tools/${tool.slug}`} className={tool.comingSoon || tool.maintenance ? "cursor-not-allowed opacity-50" : ""} title={tool.comingSoon ? "Coming Soon" : tool.maintenance ? "Maintenance" : ""}>
               <h3 className="text-lg font-semibold">{tool.name}</h3>
               <p className="text-sm opacity-70 mt-1">{tool.description}</p>
             </Link>
             {tool.comingSoon && (
               <span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-lg z-10">
                 Coming Soon
+              </span>
+            )}
+            {tool.maintenance && (
+              <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-lg z-10">
+                Maintenance
               </span>
             )}
             <button
@@ -81,13 +86,18 @@ return ( <main className="min-h-screen flex flex-col items-center bg-gray-50 dar
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {otherTools.map(tool => (
         <div key={tool.slug} className="relative p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800 hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
-          <Link href={tool.comingSoon ? "#" : `/tools/${tool.slug}`} className={tool.comingSoon ? "cursor-not-allowed opacity-50" : ""} title={tool.comingSoon ? "Coming Soon" : ""}>
+          <Link href={tool.comingSoon || tool.maintenance ? "#" : `/tools/${tool.slug}`} className={tool.comingSoon || tool.maintenance ? "cursor-not-allowed opacity-50" : ""} title={tool.comingSoon ? "Coming Soon" : tool.maintenance ? "Maintenance" : ""}>
             <h3 className="text-lg font-semibold">{tool.name}</h3>
             <p className="text-sm opacity-70 mt-1">{tool.description}</p>
           </Link>
           {tool.comingSoon && (
             <span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-lg z-10">
               Coming Soon
+            </span>
+          )}
+          {tool.maintenance && (
+            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-lg z-10">
+              Maintenance
             </span>
           )}
           {mounted && (

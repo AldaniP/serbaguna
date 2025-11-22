@@ -4,6 +4,7 @@ export type Tool = {
   description: string;
   icon?: string;       // nama icon jika pakai library icon
   comingSoon: boolean;
+  maintenance?: boolean;
 };
 
 export const toolsRegistry: Tool[] = [
@@ -20,6 +21,7 @@ export const toolsRegistry: Tool[] = [
     description: "Catatan yang bisa disimpan ke Supabase",
     icon: "FileText",
     comingSoon: false,
+    maintenance: true,
   },
   {
     name: "Todo List",
@@ -27,6 +29,7 @@ export const toolsRegistry: Tool[] = [
     description: "Daftar tugas harian yang bisa ditandai selesai",
     icon: "CheckSquare",
     comingSoon: false,
+    maintenance: true,
   },
   {
     name: "Converter",
